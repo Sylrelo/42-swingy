@@ -1,14 +1,14 @@
 package com.slopez.swingy.Model;
 
-public class Foe {
+public class FoeModel {
 
 	private String name;
-	private Number level;
-	private Number attack;
-	private Number defense;
-	private Number hitpoint;
+	private int level;
+	private int attack;
+	private int defense;
+	private int hitpoint;
 
-	public Foe() {
+	public FoeModel() {
 		this.name = "Random name";
 		this.level = 1;
 	}
@@ -17,24 +17,24 @@ public class Foe {
 		return this.name;
 	}
 
-	public Number getLevel() {
+	public int getLevel() {
 		return this.level;
 	}
 
-	public Number getAttack() {
+	public int getAttack() {
 		return this.attack;
 	}
 
-	public Number getDefense() {
+	public int getDefense() {
 		return this.defense;
 	}
 
 
-	public Number getHitpoint() {
+	public int getHitpoint() {
 		return this.hitpoint;
 	}
 
-	public void setHitpoint(Number hitpoint) {
+	public void setHitpoint(int hitpoint) {
 		this.hitpoint = hitpoint;
 	}
 }

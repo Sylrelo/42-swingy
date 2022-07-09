@@ -1,10 +1,10 @@
 package com.slopez.swingy.Model.Items;
 
-public class Item {
+public class ItemModel {
 	private String name;
-	private Number modifier;
+	private int modifier;
 
-	public Item(String name, Number modifier) {
+	public ItemModel(String name, int modifier) {
 		this.name = name;
 		this.modifier = modifier;
 	}
@@ -13,7 +13,7 @@ public class Item {
 		return this.name;
 	}
 
-	public Number getModifier() {
+	public int getModifier() {
 		return this.modifier;
 	}
 }
