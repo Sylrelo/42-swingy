@@ -1,27 +1,19 @@
 package com.slopez.swingy.Model.Hero;
 
-import com.slopez.swingy.Model.Items.ArmorModel;
-import com.slopez.swingy.Model.Items.HelmModel;
-import com.slopez.swingy.Model.Items.WeaponModel;
-
 public class HeroModel {
 
 	private String name;
 	private String heroClass;
+
 	private int level;
 	private int experience;
 	
 	private int attack;
 	private int defense;
 	private int hitpoint;
+	private int maxHitPoint;
 
-	private HelmModel helm;
-	private ArmorModel armor;
-	private WeaponModel weapon;
-
-	public HeroModel() {
-
-	}
+	public HeroModel() {}
 
 	public String getName() {
 		return this.name;
@@ -33,6 +25,10 @@ public class HeroModel {
 
 	public int getLevel() {
 		return this.level;
+	}
+
+	public void setLevel(int level) {
+		 this.level = level;
 	}
 
 	public int getExperience() {
@@ -55,31 +51,24 @@ public class HeroModel {
 		return this.hitpoint;
 	}
 
+	public int getMaxHitPoint() {
+		return this.maxHitPoint;
+	}
+
 	public void setHitpoint(int hitpoint) {
 		this.hitpoint = hitpoint;
 	}
 
-	public HelmModel getHelm() {
-		return this.helm;
+	public void setAttack(int attack) {
+		this.attack = attack;
 	}
 
-	public ArmorModel getArmor() {
-		return this.armor;
+	public void setDefense(int defense) {
+		this.defense = defense;
 	}
 
-	public WeaponModel getWeapon() {
-		return this.weapon;
+	public void setMaxHitpoint(int maxHitPoint) {
+		this.maxHitPoint = maxHitPoint;
 	}
 
-	public void  setHelm(HelmModel helm) {
-		this.helm = helm;
-	}
-
-	public void  setArmor(ArmorModel armor) {
-		this.armor = armor;
-	}
-
-	public void  setWeapon(WeaponModel weapon) {
-		this.weapon = weapon;
-	}
 }

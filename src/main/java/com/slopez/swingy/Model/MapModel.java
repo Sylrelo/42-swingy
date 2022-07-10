@@ -1,20 +1,23 @@
 package com.slopez.swingy.Model;
 
+import com.slopez.swingy.Controller.Foe;
+
 public class MapModel {
 
-	final static int MAP_SIZE = 256;
+	final static public int MAP_SIZE = 256;
 
-	private int[] map;
+	private Foe[] map;
 
 	public MapModel() {
-		this.map = new int[MapModel.MAP_SIZE * MapModel.MAP_SIZE];
+		this.map = new Foe[MapModel.MAP_SIZE * MapModel.MAP_SIZE];
+		
+		for (int i = 0; i < MapModel.MAP_SIZE * MapModel.MAP_SIZE; i++) {
+			this.map[i] = null;
+		}
 	}
 
-	public int[] getMap() {
+	public Foe[] getMap() {
 		return this.map;
 	}
 
-	public int getAt(int x, int y) {
-		return this.map[x * MapModel.MAP_SIZE + y];
-	}
 }

@@ -1,11 +1,18 @@
 package com.slopez.swingy.Controller;
 
-import com.slopez.swingy.Model.MapModel;
-import com.slopez.swingy.Model.Hero.HeroModel;
-
 public class Game {
-	// private Map map;
-	// private HeroModel hero;
+	private Hero hero;
+	private Map map;
 
-	public Game() {}
+	public Game() {
+		this.map = new Map();
+
+		this.hero = new Hero();
+		this.hero.test();
+
+		for (int i = 0; i < 20; i++) {
+			this.hero.addExperience(400);
+			this.hero.test();
+		}
+	}
 }
