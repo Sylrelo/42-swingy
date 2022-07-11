@@ -1,0 +1,22 @@
+package com.slopez.swingy.Model;
+
+
+public class MapModel {
+
+	// final static public int MAP_SIZE = 256;
+
+	// private boolean[] map;
+
+	public MapModel() {
+		// this.map = new boolean[MapModel.MAP_SIZE * MapModel.MAP_SIZE];
+		
+		// for (int i = 0; i < MapModel.MAP_SIZE * MapModel.MAP_SIZE; i++) {
+		// 	this.map[i] = false;
+		// }
+	}
+
+	// public boolean[] getMap() {
+	// 	return this.map;
+	// }
+
+}
