@@ -12,4 +12,35 @@ public class Foe {
 	public FoeModel getModel() {
 		return this.foe;
 	}
+
+	public void receiveDamage(int heroLevel, int heroDamage) {
+		int damageIncrease = (int) (((heroLevel - this.getLevel()) / 13.37) * heroDamage);
+
+		int diff = Math.max((heroDamage + damageIncrease) - this.foe.getDefense(), 1);
+
+		this.foe.decreaseHitPoint(diff);
+	}
+
+	public int getLevel() {
+		return this.foe.getLevel();
+	}
+
+	public int getAttack() {
+		return this.foe.getAttack();
+	}
+
+	public int getHitpoint() {
+		return this.foe.getHitpoint();
+	}
+
+	public static Foe generateFoe(int heroLevel) {
+		FoeModel foe = new FoeModel();
+
+		foe.setLevel(heroLevel);
+		foe.setHitpoint(10);
+		foe.setAttack(10);
+		foe.setDefense(10);
+
+		return new Foe(foe);	
+	}
 }

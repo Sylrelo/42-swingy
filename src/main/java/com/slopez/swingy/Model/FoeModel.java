@@ -1,8 +1,13 @@
 package com.slopez.swingy.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class FoeModel {
 
 	private String name;
+
 	private int level;
 	private int attack;
 	private int defense;
@@ -13,28 +18,8 @@ public class FoeModel {
 		this.level = 1;
 	}
 
-	public String getName() {
-		return this.name;
+	public void decreaseHitPoint(int value) {
+		this.hitpoint -= value;
 	}
 
-	public int getLevel() {
-		return this.level;
-	}
-
-	public int getAttack() {
-		return this.attack;
-	}
-
-	public int getDefense() {
-		return this.defense;
-	}
-
-
-	public int getHitpoint() {
-		return this.hitpoint;
-	}
-
-	public void setHitpoint(int hitpoint) {
-		this.hitpoint = hitpoint;
-	}
 }

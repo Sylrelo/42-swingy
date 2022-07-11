@@ -41,17 +41,17 @@ public class Hero {
 		return this.hero.getHitpoint() + this.helm.getModifier();
 	}
 
-	private int getExperienceForLevel(int level) {
-		return (level * 1000 + ((level - 1) * (level - 1)) * 450);
-	}
-
 	public int getLevel() {
 		return this.hero.getLevel();
 	}
 
-	// private void setPosition(Vector2 position) {
-	// 	this.hero.setPosition(position);
-	// }
+	public HeroModel getModel() {
+		return this.hero;
+	}
+
+	public Vector2 getPosition() {
+		return this.hero.getPosition();
+	}
 
 	public void moveBy(Vector2 move) {
 		this.hero.addPostion(move);
@@ -69,12 +69,14 @@ public class Hero {
 		}
 	}
 
-	public HeroModel getModel() {
-		return this.hero;
-	}
+	public void receiveDamage(int foeLevel, int foeDamage) {
+		int damageIncrease = (int) (((foeLevel - this.getLevel()) / 13.37) * foeDamage);
 
-	public Vector2 getPosition() {
-		return this.hero.getPosition();
+		int diff = Math.max((foeDamage + damageIncrease) - this.getDefense(), 1);
+
+		System.out.printf("%d %d\n", damageIncrease, diff);
+
+		this.hero.decreaseHitPoint(diff);
 	}
 
 	private void leveUp() {
@@ -87,8 +89,8 @@ public class Hero {
 		this.hero.setMaxHitPoint();
 	}
 
-	public void test() {
-		System.out.printf("%d %d | %d %d %d\n", this.hero.getExperience(), this.hero.getLevel(), this.hero.getAttack(), this.hero.getDefense(), this.hero.getMaxHitPoint());
+	private int getExperienceForLevel(int level) {
+		return (level * 1000 + ((level - 1) * (level - 1)) * 450);
 	}
 
 	private <T> Boolean validate(T validatedClass) {

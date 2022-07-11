@@ -17,4 +17,8 @@ public class Vector2 {
 		this.x += u.x;
 		this.y += u.y;
 	}
+
+	public int hash() {
+		return (int) x << 16 | (int) y;
+	}
 }

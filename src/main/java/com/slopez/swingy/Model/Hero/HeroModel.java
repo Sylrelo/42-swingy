@@ -4,7 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import com.slopez.swingy.Vector2;
-import com.slopez.swingy.Controller.Map;
+import com.slopez.swingy.Controller.GameMap;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +46,7 @@ public class HeroModel {
 		this.defense = 10;
 		this.level = 1;
 
-		double mapSize = Map.getMaxSize(1);
+		double mapSize = GameMap.getMaxSize(1);
 		this.position = new Vector2(mapSize * 0.5, mapSize * 0.5);
 	}
 
@@ -72,6 +72,10 @@ public class HeroModel {
 
 	public void increaseLevel(int value) {
 		this.level += value;
+	}
+
+	public void decreaseHitPoint(int value) {
+		this.hitpoint -= value;
 	}
 
 	public void setMaxHitPoint() {
