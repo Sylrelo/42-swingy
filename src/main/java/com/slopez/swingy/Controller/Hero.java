@@ -9,10 +9,10 @@ import com.slopez.swingy.Model.Items.ArmorModel;
 import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.WeaponModel;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 public class Hero {
 	private static Validator validator;
@@ -83,12 +83,14 @@ public class Hero {
 
 
 
-	private <T> void validate(T validatedClass) {
+	private <T> Boolean validate(T validatedClass) {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 
 		Set<ConstraintViolation<T>> constraintViolations = validator.validate( validatedClass );
 
 		System.out.println(constraintViolations);
+
+		return constraintViolations.size() > 0;
 	}
 }
