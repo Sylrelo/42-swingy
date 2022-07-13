@@ -3,14 +3,19 @@ package com.slopez.swingy.Controller;
 import java.util.Scanner;
 
 import com.slopez.swingy.Vector2;
+import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
 
 public class Game {
+
+	private static int S_IDLE = 0x00;
+	private static int S_ATTACKING = 0x01;
+
 	private Hero hero;
 	private GameMap map;
 	private Foe currentFoe;
 
-	private int lastState = 0x0;
+	private int lastState = S_IDLE;
 
 	public Game() {
 		this.map = new GameMap();
@@ -27,6 +32,7 @@ public class Game {
 			int mapSize = GameMap.getMaxSize(hero.getLevel());
 
 			MapView mapViewCli = new MapView(position, mapSize);
+			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
 
 			if (position.x <= 0 || position.x > mapSize || position.y <= 0 || position.y > mapSize) {
 				System.out.println("Game finished ! Congrats.");
@@ -37,13 +43,15 @@ public class Game {
 				currentFoe = Foe.generateFoe(this.hero.getLevel());
 			}
 
-			System.out.printf("Position : %.0f %.0f\n", position.x, position.y);
-			System.out.printf("Health : %d / %d\n", this.hero.getHitPoints(), this.hero.getModel().getMaxHitPoint());
-			System.out.printf("Current Level : %d\n", this.hero.getLevel());
-			System.out.printf("Currently Fighting : %s\n", currentFoe != null ? "yes" : "no");
-			System.out.flush();
+			// System.out.printf("Position : %.0f %.0f\n", position.x, position.y);
+			// System.out.printf("Health : %d / %d\n", this.hero.getHitPoints(), this.hero.getModel().getMaxHitPoint());
+			// System.out.printf("Current Level : %d\n", this.hero.getLevel());
+			// System.out.printf("Currently Fighting : %s\n", currentFoe != null ? "yes" : "no");
+			// System.out.flush();
 
-			if (currentFoe != null && lastState == 1) {
+			hudViewCli.aled();
+
+			if (currentFoe != null && (lastState & S_ATTACKING) == S_ATTACKING) {
 				System.out.printf("Fight Interface");
 				if (this.simulateFight())
 					continue;
@@ -54,7 +62,7 @@ public class Game {
 				mapViewCli.GetLines();
 			}
 
-			if (currentFoe != null && lastState == 0) {
+			if (currentFoe != null && lastState == S_IDLE) {
 				System.out.println("Enemy Encounter : FIGHT or RUN ?");
 			}
 

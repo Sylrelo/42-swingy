@@ -8,8 +8,5 @@ public class Main
     {
         Game game = new Game();
 
-        
-
-        System.out.println( "Hello World!" );
     }
 }

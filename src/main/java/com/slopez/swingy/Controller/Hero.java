@@ -38,7 +38,11 @@ public class Hero {
 	}
 
 	public int getHitPoints() {
-		return this.hero.getHitpoint() + this.helm.getModifier();
+		return this.hero.getHitpoint() ;
+	}
+
+	public int getMaxHitPoints() {
+		return this.hero.getMaxHitPoint() + this.helm.getModifier();
 	}
 
 	public int getLevel() {
@@ -73,8 +77,6 @@ public class Hero {
 		int damageIncrease = (int) (((foeLevel - this.getLevel()) / 13.37) * foeDamage);
 
 		int diff = Math.max((foeDamage + damageIncrease) - this.getDefense(), 1);
-
-		System.out.printf("%d %d\n", damageIncrease, diff);
 
 		this.hero.decreaseHitPoint(diff);
 	}
