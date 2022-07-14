@@ -1,23 +1,89 @@
 package com.slopez.swingy;
 
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import com.slopez.swingy.Controller.Game;
+import com.slopez.swingy.Controller.Hero;
 
 public class Main {
+
+    private static String[] classes = { "Wizard", "Warrior", "Tank", "Necromancer", "Assassin" };
+
     public static void main(String[] args) {
-        Game game = new Game();
 
-        // for (int i = 1; i < 25; i++) {
-        //     double lg = i * 0.1;
+        Scanner scanner = new Scanner(System.in);
 
-        //     int attack = 14;
+        Hero hero = null;
 
-        //     double p = Math.max(0.0, (40 / (100 + (100 * lg))));
+        hero = Hero.Create("patate", "Wizard");
 
-        //     int a2 = (int) ((double) attack - (attack * p));
+        new Game(hero);
 
-        //     // System.out.printf("%.4f - %.4f > %.1f\n", lg, 100 + (100 * lg), (30 / (100 +
-        //     // (100 * lg))) * 100);
-        //     System.out.printf(" %f | %d => %d\n", p, attack, a2);
-        // }
+        /*
+         * System.out.println("[c] Create hero | [l] Load hero");
+         * 
+         * String input = getInput(scanner);
+         * if (input.equals("c")) {
+         * 
+         * String heroClass = chooseClass(scanner);
+         * String heroName = chooseName(scanner, heroClass);
+         * 
+         * hero = Hero.Create(heroName, heroClass);
+         * 
+         * new Game(hero);
+         * 
+         * } else if (input.equals("l")) {
+         * System.out.println("Load !");
+         * }
+         */
     }
+
+    static public JFrame createWindow() {
+        JFrame frame = new JFrame("Swingy");
+
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(1280, 720);
+        frame.setVisible(true);
+
+        return frame;
+    }
+
+    static private String getInput(Scanner scanner) {
+        String input = scanner.next();
+        input = input.toLowerCase();
+        return input;
+    }
+
+    static private String chooseClass(Scanner scanner) {
+        System.out.printf("Choose a class : \n");
+        System.out.printf("[0] Wizard\n");
+        System.out.printf("[1] Warrior\n");
+        System.out.printf("[2] Tank\n");
+        System.out.printf("[3] Necromancer\n");
+        System.out.printf("[4] Assassin\n");
+
+        String input = getInput(scanner);
+        if (Integer.parseInt(input) < 0 || Integer.parseInt(input) > 4) {
+            return chooseClass(scanner);
+        }
+
+        return classes[Integer.parseInt(input)];
+    }
+
+    static private String chooseName(Scanner scanner, String heroClass) {
+        System.out.printf("Choose your %s name : \n", heroClass);
+        String input = getInput(scanner);
+
+        if (input.length() < 3) {
+            System.out.println("");
+        }
+
+        return input;
+    }
+    // private Hero createHero() {
+
+    // }
 }

@@ -1,5 +1,6 @@
 package com.slopez.swingy.View;
 
+import com.slopez.swingy.Utils;
 import com.slopez.swingy.Controller.Foe;
 import com.slopez.swingy.Controller.Hero;
 import com.slopez.swingy.Model.Items.ArmorModel;
@@ -42,12 +43,7 @@ public class HudView {
 	}
 
 	public void displayExperienceBar() {
-
-		int previousLevelExperience = hero.getLevel() > 1 ? Hero.getExperienceForLevel(hero.getLevel() - 1)
-				: 0;
-
-		double percentage = ((double) (hero.getModel().getExperience() - previousLevelExperience)
-				/ (double) (Hero.getExperienceForLevel(hero.getLevel()) - previousLevelExperience));
+		double percentage = Utils.getLevelPercentage(hero.getLevel(), hero.getModel().getExperience());
 
 		StringBuffer buffer = new StringBuffer(
 				String.format("[Level %-10d %3d%%]", hero.getLevel(), (int) (percentage * 100)));

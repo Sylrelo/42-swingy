@@ -30,12 +30,18 @@ public class Hero {
 	@Getter
 	private WeaponModel weapon;
 
-	public Hero() {
-		this.hero = new Wizard();
+	public Hero(HeroModel createdHero) {
+		this.hero = createdHero;
 
 		this.helm = new HelmModel("Newbie's mask", 0);
 		this.armor = new ArmorModel("Weakling body", 0);
 		this.weapon = new WeaponModel("Dry hands", 0);
+	}
+
+	static public Hero Create(String name, String heroClass) {
+		HeroModel newHero = new Wizard();
+		newHero.setName(name);
+		return new Hero(newHero);
 	}
 
 	public void equipItem(ItemModel item) {

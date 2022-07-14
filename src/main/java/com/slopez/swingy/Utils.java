@@ -1,5 +1,6 @@
 package com.slopez.swingy;
 
+import com.slopez.swingy.Controller.Hero;
 import com.slopez.swingy.Model.Hero.HeroModel;
 import com.slopez.swingy.Model.Hero.Wizard;
 
@@ -21,5 +22,15 @@ public class Utils {
 
     public static int getDamageIncrease(int ownLevel, int opponentLevel, int damage) {
         return (int) (((opponentLevel - ownLevel) / 13.37) * damage);
+    }
+
+    public static double getLevelPercentage(int heroLevel, int heroExperience) {
+        int previousLevelExperience = heroLevel > 1 ? Hero.getExperienceForLevel(heroLevel - 1)
+                : 0;
+
+        double percentage = ((double) (heroExperience - previousLevelExperience)
+                / (double) (Hero.getExperienceForLevel(heroLevel) - previousLevelExperience));
+
+        return percentage;
     }
 }

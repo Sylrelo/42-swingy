@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
+import com.slopez.swingy.Main;
 import com.slopez.swingy.Vector2;
 import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
+import com.slopez.swingy.View.Swing.HudGUI;
 
 public class Game {
 
@@ -33,14 +37,19 @@ public class Game {
 	boolean handled = false;
 	private Vector2 oldHeroPosition;
 
-	public Game() {
+	public Game(Hero hero) {
 		this.map = new GameMap();
-		this.hero = new Hero();
+		this.hero = hero;
 		this.droppedItem = null;
 
 		this.fightLog = new ArrayList<String>();
 
 		Scanner scanner = new Scanner(System.in);
+
+		JFrame jframe = Main.createWindow();
+		HudGUI swingGui = new HudGUI(jframe);
+
+		swingGui.displayHero();
 
 		while (true) {
 			System.out.print("\033[H\033[2J");
@@ -65,6 +74,10 @@ public class Game {
 
 			MapView mapViewCli = new MapView(position, mapSize);
 			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
+
+			swingGui.setFoe(this.currentFoe);
+			swingGui.setHero(this.hero);
+			swingGui.update();
 
 			if (position.x <= 0 || position.x > mapSize || position.y <= 0 || position.y > mapSize) {
 				System.out.println("Game finished ! Congrats.");
