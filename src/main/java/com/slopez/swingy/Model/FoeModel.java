@@ -3,7 +3,8 @@ package com.slopez.swingy.Model;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class FoeModel {
 
 	private String name;
@@ -12,6 +13,8 @@ public class FoeModel {
 	private int attack;
 	private int defense;
 	private int hitpoint;
+
+	private int maxHitPoint;
 
 	public FoeModel() {
 		this.name = "Random name";

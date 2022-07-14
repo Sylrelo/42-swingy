@@ -1,11 +1,13 @@
 package com.slopez.swingy.Controller;
 
-import java.lang.StackWalker.Option;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.slopez.swingy.Vector2;
+import com.slopez.swingy.Model.Items.ArmorModel;
+import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
 
@@ -15,10 +17,13 @@ public class Game {
 	private static int S_ATTACKING = 0x01;
 	private static int S_FIGHT_WON = 0x02;
 	private static int S_FIGHT_LOST = 0x04;
+	private static int S_ACCEPT_ITEM = 0x08;
+	private static int S_REFUSE_ITEM = 0x10;
 
 	private Hero hero;
 	private GameMap map;
 	private Foe currentFoe;
+	private ItemModel droppedItem;
 
 	private int lastState = S_IDLE;
 
@@ -27,6 +32,8 @@ public class Game {
 	public Game() {
 		this.map = new GameMap();
 		this.hero = new Hero();
+		this.droppedItem = null;
+
 		this.fightLog = new ArrayList<String>();
 
 		Scanner scanner = new Scanner(System.in);
@@ -38,6 +45,8 @@ public class Game {
 			Vector2 position = hero.getPosition();
 
 			int mapSize = GameMap.getMaxSize(hero.getLevel());
+
+			this.handleDroppedItemState();
 
 			MapView mapViewCli = new MapView(position, mapSize);
 			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
@@ -51,32 +60,34 @@ public class Game {
 				currentFoe = Foe.generateFoe(this.hero.getLevel());
 			}
 
-			// System.out.printf("Position : %.0f %.0f\n", position.x, position.y);
-			// System.out.printf("Health : %d / %d\n", this.hero.getHitPoints(),
-			// this.hero.getModel().getMaxHitPoint());
-			// System.out.printf("Current Level : %d\n", this.hero.getLevel());
-			// System.out.printf("Currently Fighting : %s\n", currentFoe != null ? "yes" :
-			// "no");
-			// System.out.flush();
-
 			hudViewCli.aled();
-
-			if (currentFoe != null && (lastState & S_ATTACKING) == S_ATTACKING) {
-				System.out.printf("Fight Interface");
-				if (this.simulateFight())
-					continue;
-				else
-					break;
-			} else {
-				mapViewCli.GetLines();
-			}
-
-			if (currentFoe != null && lastState == S_IDLE) {
-				System.out.println("Enemy Encounter : FIGHT or RUN ?");
-			}
+			hudViewCli.displayExperienceBar();
 
 			for (String msg : this.fightLog) {
 				System.out.println(msg);
+			}
+
+			if (currentFoe != null && (lastState & S_ATTACKING) == S_ATTACKING) {
+				if (this.simulateFight())
+					continue;
+				else {
+					this.currentFoe = null;
+					// this.lastState = S_IDLE;
+					continue;
+				}
+			} else if (lastState == S_IDLE) {
+				mapViewCli.GetLines();
+			}
+
+			if (lastState == S_FIGHT_WON) {
+				this.droppedItem = new ArmorModel("patate", 3);
+				hudViewCli.displayItemProperties(this.droppedItem);
+				System.out.println("[y] Equip new item | [n] Leave");
+			}
+
+			if (currentFoe != null && lastState == S_IDLE) {
+				System.out.println("[f] Fight | [r] Try to run away");
+				System.out.println("Enemy Encounter : FIGHT or RUN ?");
 			}
 
 			String input = scanner.next();
@@ -85,7 +96,9 @@ public class Game {
 			if (input.equals("x"))
 				break;
 
-			if (currentFoe == null)
+			if (lastState == S_FIGHT_WON)
+				this.handleCliItem(input);
+			else if (currentFoe == null)
 				this.handleCliMove(input);
 			else
 				this.handleCliCombat(input);
@@ -112,9 +125,11 @@ public class Game {
 		insertLog("Received %d damages.", receivedDamage);
 
 		if (this.currentFoe.getHitpoint() <= 0) {
-			this.hero.addExperience(this.currentFoe.getGivenExperience());
+			boolean hasLeveledUp = this.hero.addExperience(this.currentFoe.getGivenExperience());
 
-			insertLog("Gained %d experiences.", this.currentFoe.getGivenExperience());
+			insertLog("You won and gained %d experiences.", this.currentFoe.getGivenExperience());
+			if (hasLeveledUp)
+				insertLog("You leveled up ! Congratulation.");
 
 			this.lastState = S_FIGHT_WON;
 		}
@@ -130,11 +145,23 @@ public class Game {
 		return true;
 	}
 
+	private void handleCliItem(String input) {
+		switch (input) {
+			case "y":
+				this.lastState = S_ACCEPT_ITEM;
+				insertLog("You equiped the item !");
+				break;
+			case "n":
+				insertLog("You left the item :(");
+				this.lastState = S_REFUSE_ITEM;
+				break;
+		}
+	}
+
 	private void handleCliCombat(String input) {
 		switch (input) {
 			case "f":
-				this.lastState = 1;
-				// this.simulateFight();
+				this.lastState = S_ATTACKING;
 				break;
 			case "r":
 				this.tryRun();
@@ -164,10 +191,32 @@ public class Game {
 	}
 
 	private void insertLog(String format, Object... args) {
-		this.fightLog.add(0, String.format(format, args));
+		LocalDateTime time = LocalDateTime.now();
 
-		if (this.fightLog.size() >= 5) {
+		String log = String.format("[%d:%d:%d] %s", time.getHour(), time.getMinute(), time.getSecond(),
+				String.format(format, args));
+
+		this.fightLog.add(0, log);
+
+		if (this.fightLog.size() > 5) {
 			this.fightLog.remove(5);
 		}
+	}
+
+	private void handleDroppedItemState() {
+		if (lastState == S_ACCEPT_ITEM) {
+			this.hero.equipItem(this.droppedItem);
+			this.droppedItem = null;
+		}
+
+		if (lastState == S_REFUSE_ITEM)
+			lastState = S_IDLE;
+	}
+
+	private void generateLoot() {
+		this.hero.getLevel();
+		int modifier = (int) (5.0 + (10.0 * (double) hero.getLevel() * 0.2));
+
+		this.droppedItem = Item.Create("armor", modifier);
 	}
 }

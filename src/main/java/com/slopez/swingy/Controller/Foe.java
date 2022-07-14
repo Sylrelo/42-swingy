@@ -44,6 +44,7 @@ public class Foe {
 
 		foe.setLevel(heroLevel);
 		foe.setHitpoint(10);
+		foe.setMaxHitPoint(10);
 		foe.setAttack(10);
 		foe.setDefense(10);
 

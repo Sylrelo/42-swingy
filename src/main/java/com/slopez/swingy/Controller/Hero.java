@@ -6,6 +6,7 @@ import com.slopez.swingy.Vector2;
 import com.slopez.swingy.Model.Hero.HeroModel;
 import com.slopez.swingy.Model.Items.ArmorModel;
 import com.slopez.swingy.Model.Items.HelmModel;
+import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.Model.Items.WeaponModel;
 
 import javax.validation.ConstraintViolation;
@@ -17,6 +18,7 @@ public class Hero {
 	private static Validator validator;
 
 	private HeroModel hero;
+
 	private HelmModel helm;
 	private ArmorModel armor;
 	private WeaponModel weapon;
@@ -27,6 +29,16 @@ public class Hero {
 		this.helm = new HelmModel("The face of a newbie", 0);
 		this.armor = new ArmorModel("The body of a weakling", 0);
 		this.weapon = new WeaponModel("The hands of a weirdo", 0);
+	}
+
+	public void equipItem(ItemModel item) {
+		if (item instanceof ArmorModel) {
+			this.armor = (ArmorModel) item;
+		} else if (item instanceof HelmModel) {
+			this.helm = (HelmModel) item;
+		} else if (item instanceof WeaponModel) {
+			this.weapon = (WeaponModel) item;
+		}
 	}
 
 	public int getAttackDamage() {
@@ -65,12 +77,18 @@ public class Hero {
 		this.hero.addPostion(new Vector2(x, y));
 	}
 
-	public void addExperience(int experience) {
+	/**
+	 * @return Return TRUE if player has leveled up, false otherwise.
+	 */
+	public boolean addExperience(int experience) {
 		this.hero.setExperience(this.hero.getExperience() + experience);
 
-		if (this.hero.getExperience() > this.getExperienceForLevel(this.hero.getLevel() + 1)) {
+		if (this.hero.getExperience() > Hero.getExperienceForLevel(this.hero.getLevel() + 1)) {
 			this.leveUp();
+			return true;
 		}
+
+		return false;
 	}
 
 	public int receiveDamage(int foeLevel, int foeDamage) {
@@ -93,7 +111,7 @@ public class Hero {
 		this.hero.setMaxHitPoint();
 	}
 
-	private int getExperienceForLevel(int level) {
+	static public int getExperienceForLevel(int level) {
 		return (level * 1000 + ((level - 1) * (level - 1)) * 450);
 	}
 
