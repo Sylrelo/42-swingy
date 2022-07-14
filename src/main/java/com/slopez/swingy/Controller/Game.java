@@ -30,8 +30,8 @@ public class Game {
 	private Foe currentFoe;
 	private ItemModel droppedItem;
 
+	private boolean isCli = true;
 	private int lastState = S_IDLE;
-
 	private List<String> fightLog;
 
 	boolean handled = false;
@@ -50,6 +50,10 @@ public class Game {
 		HudGUI swingGui = new HudGUI(jframe);
 
 		swingGui.displayHero();
+		jframe.dispose();
+		jframe.pack();
+		jframe.setSize(1280, 720);
+		jframe.setVisible(true);
 
 		while (true) {
 			System.out.print("\033[H\033[2J");
@@ -84,9 +88,11 @@ public class Game {
 				System.exit(0);
 			}
 
-			hudViewCli.displayStats();
-			hudViewCli.displayExperienceBar();
-			hudViewCli.displayItems();
+			if (isCli) {
+				hudViewCli.displayStats();
+				hudViewCli.displayExperienceBar();
+				hudViewCli.displayItems();
+			}
 
 			for (String msg : this.fightLog) {
 				System.out.println(msg);
@@ -100,7 +106,7 @@ public class Game {
 					// this.lastState = S_IDLE;
 					continue;
 				}
-			} else if (lastState == S_IDLE) {
+			} else if (isCli && lastState == S_IDLE) {
 				mapViewCli.GetLines();
 			}
 
@@ -111,12 +117,24 @@ public class Game {
 					insertLog("You've been healed for 10%% health point (%d)", healed);
 					handled = true;
 				}
-				hudViewCli.displayItemProperties(this.droppedItem);
-				System.out.println("[y] Equip new item | [n] Leave");
+				if (isCli) {
+					hudViewCli.displayItemProperties(this.droppedItem);
+					System.out.println("[y] Equip new item | [n] Leave");
+				}
 			}
 
-			if (currentFoe != null && lastState == S_IDLE) {
+			if (isCli && currentFoe != null && lastState == S_IDLE) {
 				System.out.println("[f] Fight | [r] Try to run away");
+			}
+
+			if (isCli == false) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println("Waiting");
+				continue;
 			}
 
 			String input = scanner.next();
@@ -124,6 +142,12 @@ public class Game {
 
 			if (input.equals("x"))
 				break;
+			if (input.equals("g")) {
+				jframe.pack();
+				jframe.setSize(1280, 720);
+				jframe.setVisible(true);
+				isCli = false;
+			}
 
 			if (lastState == S_FIGHT_WON)
 				this.handleCliItem(input);
