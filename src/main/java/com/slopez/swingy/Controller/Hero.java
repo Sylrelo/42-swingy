@@ -38,7 +38,7 @@ public class Hero {
 	}
 
 	public int getHitPoints() {
-		return this.hero.getHitpoint() ;
+		return this.hero.getHitpoint();
 	}
 
 	public int getMaxHitPoints() {
@@ -67,18 +67,20 @@ public class Hero {
 
 	public void addExperience(int experience) {
 		this.hero.setExperience(this.hero.getExperience() + experience);
-		
+
 		if (this.hero.getExperience() > this.getExperienceForLevel(this.hero.getLevel() + 1)) {
 			this.leveUp();
 		}
 	}
 
-	public void receiveDamage(int foeLevel, int foeDamage) {
+	public int receiveDamage(int foeLevel, int foeDamage) {
 		int damageIncrease = (int) (((foeLevel - this.getLevel()) / 13.37) * foeDamage);
 
 		int diff = Math.max((foeDamage + damageIncrease) - this.getDefense(), 1);
 
 		this.hero.decreaseHitPoint(diff);
+
+		return (diff);
 	}
 
 	private void leveUp() {
@@ -97,9 +99,9 @@ public class Hero {
 
 	private <T> Boolean validate(T validatedClass) {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+		validator = factory.getValidator();
 
-		Set<ConstraintViolation<T>> constraintViolations = validator.validate( validatedClass );
+		Set<ConstraintViolation<T>> constraintViolations = validator.validate(validatedClass);
 
 		System.out.println(constraintViolations);
 
