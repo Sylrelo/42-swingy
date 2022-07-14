@@ -34,18 +34,22 @@ public class HudView {
 	}
 
 	public void displayExperienceBar() {
-		int percentage = (int) Math.round(
-				((double) hero.getModel().getExperience() / (double) Hero.getExperienceForLevel(hero.getLevel()))
-						* 100);
 
-		StringBuffer buffer = new StringBuffer(String.format("[Level %-10d %3d%%]\n", hero.getLevel(), percentage));
+		int previousLevelExperience = hero.getLevel() > 1 ? Hero.getExperienceForLevel(hero.getLevel() - 1)
+				: 0;
 
-		if (percentage > 0) {
+		double percentage = ((double) (hero.getModel().getExperience() - previousLevelExperience)
+				/ (double) (Hero.getExperienceForLevel(hero.getLevel()) - previousLevelExperience));
+
+		StringBuffer buffer = new StringBuffer(
+				String.format("[Level %-10d %3d%%]", hero.getLevel(), (int) (percentage * 100)));
+
+		if ((int) (percentage * 21) > 0 && percentage < 1) {
 			buffer.insert(1, RED);
-			buffer.insert(percentage + RED.length(), RESET);
+			buffer.insert((int) (percentage * 21) + RED.length(), RESET);
 		}
 
-		p("%s\n", buffer);
+		p("%s %s\n", buffer, foe != null ? String.format("[Level %-15d]", foe.getLevel()) : "");
 	}
 
 	public void displayItemProperties(ItemModel item) {

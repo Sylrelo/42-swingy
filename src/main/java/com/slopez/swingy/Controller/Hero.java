@@ -83,7 +83,7 @@ public class Hero {
 	public boolean addExperience(int experience) {
 		this.hero.setExperience(this.hero.getExperience() + experience);
 
-		if (this.hero.getExperience() > Hero.getExperienceForLevel(this.hero.getLevel() + 1)) {
+		if (this.hero.getExperience() > Hero.getExperienceForLevel(this.hero.getLevel())) {
 			this.leveUp();
 			return true;
 		}
@@ -99,6 +99,15 @@ public class Hero {
 		this.hero.decreaseHitPoint(diff);
 
 		return (diff);
+	}
+
+	/**
+	 * @return Healed value
+	 */
+	public int healPercentage(int percentage) {
+		int healValue = (int) (this.hero.getMaxHitPoint() * (1.0 / percentage));
+		this.hero.increaseHitPoint(healValue);
+		return healValue;
 	}
 
 	private void leveUp() {

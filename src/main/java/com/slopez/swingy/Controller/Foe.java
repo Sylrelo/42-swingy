@@ -1,5 +1,8 @@
 package com.slopez.swingy.Controller;
 
+import java.util.Random;
+
+import com.slopez.swingy.Utils;
 import com.slopez.swingy.Model.FoeModel;
 
 public class Foe {
@@ -36,17 +39,37 @@ public class Foe {
 	}
 
 	public int getGivenExperience() {
-		return (int) ((double) foe.getLevel() * 0.25 + (foe.getAttack() + (foe.getDefense() * 0.25)));
+		return (int) (((double) foe.getLevel() * 0.5 + (foe.getAttack() * 0.5 + (foe.getDefense() * 0.25))) * 42.0
+				+ (21.0 * (double) foe.getLevel() * 0.105));
+	}
+
+	public int getPower() {
+		return Utils.getPower(foe.getAttack(), foe.getDefense(), foe.getLevel());
 	}
 
 	public static Foe generateFoe(int heroLevel) {
 		FoeModel foe = new FoeModel();
+		Random rnd = new Random();
+		int foeLevel = heroLevel;
 
-		foe.setLevel(heroLevel);
-		foe.setHitpoint(10);
-		foe.setMaxHitPoint(10);
-		foe.setAttack(10);
-		foe.setDefense(10);
+		double rngLevel = rnd.nextDouble();
+
+		if (rngLevel > 0.9)
+			foeLevel = heroLevel + 2;
+		else if (rngLevel > 0.8)
+			foeLevel = heroLevel + 1;
+		else if (rngLevel > .2)
+			foeLevel = heroLevel;
+		else
+			foeLevel = Math.max(1, heroLevel - 1);
+
+		foe.setLevel(foeLevel);
+
+		foe.setHitpoint(foeLevel * 64);
+		foe.setMaxHitPoint(foeLevel * 64);
+
+		foe.setAttack(foeLevel * 4);
+		foe.setDefense(foeLevel * 4);
 
 		return new Foe(foe);
 	}

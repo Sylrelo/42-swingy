@@ -26,7 +26,7 @@ public class GameMap {
 
 		double schneid = schneiderRandom(position);
 
-		return schneid > 0.8;
+		return schneid > 0.2;
 	}
 
 	static public double schneiderRandom(Vector2 position) {

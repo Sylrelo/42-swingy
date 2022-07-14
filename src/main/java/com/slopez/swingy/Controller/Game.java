@@ -3,10 +3,10 @@ package com.slopez.swingy.Controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.slopez.swingy.Vector2;
-import com.slopez.swingy.Model.Items.ArmorModel;
 import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
@@ -28,6 +28,8 @@ public class Game {
 	private int lastState = S_IDLE;
 
 	private List<String> fightLog;
+
+	boolean handled = false;
 
 	public Game() {
 		this.map = new GameMap();
@@ -71,7 +73,7 @@ public class Game {
 				if (this.simulateFight())
 					continue;
 				else {
-					this.currentFoe = null;
+					// this.currentFoe = null;
 					// this.lastState = S_IDLE;
 					continue;
 				}
@@ -80,8 +82,13 @@ public class Game {
 			}
 
 			if (lastState == S_FIGHT_WON) {
-				this.droppedItem = new ArmorModel("patate", 3);
-				hudViewCli.displayItemProperties(this.droppedItem);
+				if (!handled) {
+					this.generateLoot();
+					int healed = this.hero.healPercentage(10);
+					insertLog("You've been healed for 10%% health point (%d)\n", healed);
+					hudViewCli.displayItemProperties(this.droppedItem);
+					handled = true;
+				}
 				System.out.println("[y] Equip new item | [n] Leave");
 			}
 
@@ -209,14 +216,27 @@ public class Game {
 			this.droppedItem = null;
 		}
 
-		if (lastState == S_REFUSE_ITEM)
+		if (lastState == S_REFUSE_ITEM || lastState == S_ACCEPT_ITEM) {
 			lastState = S_IDLE;
+			this.currentFoe = null;
+			handled = false;
+		}
+
 	}
 
 	private void generateLoot() {
 		this.hero.getLevel();
+
+		System.out.println(this.currentFoe.getLevel());
+		System.out.println(this.currentFoe.getPower());
+
+		Random rnd = new Random();
+
+		int maxModifier = rnd.nextInt(12 * currentFoe.getLevel());
 		int modifier = (int) (5.0 + (10.0 * (double) hero.getLevel() * 0.2));
 
-		this.droppedItem = Item.Create("armor", modifier);
+		System.out.printf("%d %d\n", modifier, maxModifier);
+
+		this.droppedItem = Item.Create(Item.type[rnd.nextInt(3)], modifier);
 	}
 }

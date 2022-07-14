@@ -52,6 +52,7 @@ public class HeroModel {
 
 	public void increaseHitPoint(int value) {
 		this.hitpoint += value;
+		this.hitpoint = Math.min(this.hitpoint, this.maxHitPoint);
 	}
 
 	public void increaseMaxHitPoint(int value) {
