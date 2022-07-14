@@ -43,7 +43,7 @@ public class HeroModel {
 		this.hitpoint = 120;
 		this.maxHitPoint = 120;
 		this.attack = 20;
-		this.defense = 40;
+		this.defense = 60;
 		this.level = 1;
 
 		double mapSize = GameMap.getMaxSize(1);
