@@ -81,9 +81,9 @@ public class HudView {
 
 		boolean isSuperior = item.getModifier() - oldItem.getModifier() > 0;
 
-		p("You looted a new %s\n", itemType);
-		p("%s\n", item.getName());
-		p("%16s : %+d (%s%+d%s)\n", modifierType, item.getModifier(), isSuperior ? SUPERIOR : INFERIOR,
+		p("\033[1m| You looted a new %s\n", itemType);
+		p("| %s\n", item.getName());
+		p("| %-16s : %+d (%s%+d%s)\033[0m\n", modifierType, item.getModifier(), isSuperior ? SUPERIOR : INFERIOR,
 				item.getModifier() - oldItem.getModifier(), RESET);
 
 	}

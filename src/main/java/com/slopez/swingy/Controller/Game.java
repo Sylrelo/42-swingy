@@ -59,7 +59,7 @@ public class Game {
 
 				if (rnd.nextFloat() >= 0.6) {
 					int healed = this.hero.healPercentage(10);
-					insertLog("You found an health potion ! You restored %d hit points.\n", healed);
+					insertLog("You found an health potion ! You restored %d hit points.", healed);
 				}
 			}
 
@@ -95,7 +95,7 @@ public class Game {
 				if (!handled) {
 					this.generateLoot();
 					int healed = this.hero.healPercentage(10);
-					insertLog("You've been healed for 10%% health point (%d)\n", healed);
+					insertLog("You've been healed for 10%% health point (%d)", healed);
 					handled = true;
 				}
 				hudViewCli.displayItemProperties(this.droppedItem);
@@ -104,7 +104,6 @@ public class Game {
 
 			if (currentFoe != null && lastState == S_IDLE) {
 				System.out.println("[f] Fight | [r] Try to run away");
-				System.out.println("Enemy Encounter : FIGHT or RUN ?");
 			}
 
 			String input = scanner.next();
