@@ -21,4 +21,8 @@ public class Vector2 {
 	public int hash() {
 		return (int) x << 16 | (int) y;
 	}
+
+	public Vector2 clone() {
+		return new Vector2(x, y);
+	}
 }

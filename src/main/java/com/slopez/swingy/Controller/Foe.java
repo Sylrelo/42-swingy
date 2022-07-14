@@ -17,13 +17,15 @@ public class Foe {
 	}
 
 	public int receiveDamage(int heroLevel, int heroDamage) {
-		int damageIncrease = (int) (((heroLevel - this.getLevel()) / 13.37) * heroDamage);
+		int damageIncrease = Utils.getDamageIncrease(foe.getLevel(), heroLevel, heroDamage);
+		double armorReduction = Utils.getArmorReduction(foe.getLevel(), foe.getDefense());
 
-		int diff = Math.max((heroDamage + damageIncrease) - this.foe.getDefense(), 1);
+		int damages = (heroDamage + damageIncrease);
+		int reducedDamages = (int) Math.max(damages * 0.2, (damages - (damages * (armorReduction))));
 
-		this.foe.decreaseHitPoint(diff);
+		this.foe.decreaseHitPoint(reducedDamages);
 
-		return (diff);
+		return (reducedDamages);
 	}
 
 	public int getLevel() {
@@ -54,9 +56,9 @@ public class Foe {
 
 		double rngLevel = rnd.nextDouble();
 
-		if (rngLevel > 0.9)
+		if (rngLevel > 0.95)
 			foeLevel = heroLevel + 2;
-		else if (rngLevel > 0.8)
+		else if (rngLevel > 0.85)
 			foeLevel = heroLevel + 1;
 		else if (rngLevel > .2)
 			foeLevel = heroLevel;
@@ -68,8 +70,8 @@ public class Foe {
 		foe.setHitpoint(foeLevel * 64);
 		foe.setMaxHitPoint(foeLevel * 64);
 
-		foe.setAttack(foeLevel * 14);
-		foe.setDefense(foeLevel * 14);
+		foe.setAttack(foeLevel * 22);
+		foe.setDefense(foeLevel * 22);
 
 		return new Foe(foe);
 	}

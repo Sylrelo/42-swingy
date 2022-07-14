@@ -2,8 +2,10 @@ package com.slopez.swingy.Controller;
 
 import java.util.Set;
 
+import com.slopez.swingy.Utils;
 import com.slopez.swingy.Vector2;
 import com.slopez.swingy.Model.Hero.HeroModel;
+import com.slopez.swingy.Model.Hero.Wizard;
 import com.slopez.swingy.Model.Items.ArmorModel;
 import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.ItemModel;
@@ -29,11 +31,11 @@ public class Hero {
 	private WeaponModel weapon;
 
 	public Hero() {
-		this.hero = new HeroModel();
+		this.hero = new Wizard();
 
-		this.helm = new HelmModel("The face of a newbie", 0);
-		this.armor = new ArmorModel("The body of a weakling", 0);
-		this.weapon = new WeaponModel("The hands of a weirdo", 0);
+		this.helm = new HelmModel("Newbie's mask", 0);
+		this.armor = new ArmorModel("Weakling body", 0);
+		this.weapon = new WeaponModel("Dry hands", 0);
 	}
 
 	public void equipItem(ItemModel item) {
@@ -97,17 +99,13 @@ public class Hero {
 	}
 
 	public int receiveDamage(int foeLevel, int foeDamage) {
-		int damageIncrease = (int) (((foeLevel - this.getLevel()) / 13.37) * foeDamage);
-
-		double armorReduction = (double) ((double) hero.getDefense()
-				/ (100.0 + (100.0 * ((double) hero.getLevel() * 0.12))));
+		int damageIncrease = Utils.getDamageIncrease(hero.getLevel(), foeLevel, foeDamage);
+		double armorReduction = Utils.getArmorReduction(hero.getLevel(), hero.getDefense());
 
 		int damages = (int) ((double) (foeDamage + damageIncrease));
 		int reducedDamages = (int) Math.max(damages * 0.2, (damages - (damages * (armorReduction))));
 
 		this.hero.decreaseHitPoint(reducedDamages);
-
-		// System.out.printf("==> %f\n", Math.log(hero.getLevel()) * 0.80);
 
 		return (reducedDamages);
 	}
@@ -124,9 +122,9 @@ public class Hero {
 	private void leveUp() {
 
 		this.hero.increaseLevel(1);
-		this.hero.increaseMaxHitPoint(60);
-		this.hero.increaseAttack(2);
-		this.hero.increaseDefense(4);
+		this.hero.increaseMaxHitPoint(this.hero.getPerLevelHealth());
+		this.hero.increaseAttack(this.hero.getPerLevelAttack());
+		this.hero.increaseDefense(this.hero.getPerLevelDefense());
 
 		this.hero.setMaxHitPoint();
 	}

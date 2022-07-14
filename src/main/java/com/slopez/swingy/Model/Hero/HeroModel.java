@@ -8,10 +8,11 @@ import com.slopez.swingy.Controller.GameMap;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.AccessLevel;
 
 @Getter
 @Setter
-public class HeroModel {
+public class HeroModel{
 
 	@NotBlank
 	private String name;
@@ -36,6 +37,15 @@ public class HeroModel {
 
 	@Min(0)
 	private int maxHitPoint;
+
+	@Setter(AccessLevel.NONE)
+	protected int perLevelAttack;
+
+	@Setter(AccessLevel.NONE)
+	protected int perLevelDefense;
+
+	@Setter(AccessLevel.NONE)
+	protected int perLevelHealth;
 
 	private Vector2 position;
 
@@ -86,5 +96,4 @@ public class HeroModel {
 	public void addPostion(Vector2 position) {
 		this.position.add(position);
 	}
-
 }

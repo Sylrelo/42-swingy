@@ -22,7 +22,7 @@ public class HudView {
 		this.foe = foe;
 	}
 
-	public void aled() {
+	public void displayStats() {
 
 		p("%s %s\n",
 				getHealth(hero.getHitPoints(), hero.getMaxHitPoints()),
@@ -33,6 +33,12 @@ public class HudView {
 
 		p("%s %s\n", hudDisplay("Damages", hero.getAttackDamage()), foeDamage);
 		p("%s %s\n", hudDisplay("Defense", hero.getDefense()), foeDefense);
+	}
+
+	public void displayItems() {
+		p("\n%s\n", bugHudDisplay(hero.getHelm().getName(), hero.getHelm().getModifier()));
+		p("%s\n", bugHudDisplay(hero.getArmor().getName(), hero.getArmor().getModifier()));
+		p("%s\n\n", bugHudDisplay(hero.getWeapon().getName(), hero.getWeapon().getModifier()));
 	}
 
 	public void displayExperienceBar() {
@@ -86,6 +92,10 @@ public class HudView {
 		return String.format("[%-8s %12d]", title, value);
 	}
 
+	private String bugHudDisplay(String title, int value) {
+		return String.format("[%-20s %12d]", title, value);
+	}
+
 	private String getHealth(int current, int max) {
 		int percentage = (int) Math.round(((double) current / (double) max) * 22);
 
@@ -96,7 +106,6 @@ public class HudView {
 			buffer.insert(1, RED);
 			buffer.insert(percentage + RED.length(), RESET);
 		}
-		// p("%s\n", buffer);
 		return (buffer.toString());
 	}
 

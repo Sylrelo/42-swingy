@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.slopez.swingy.Vector2;
+import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
@@ -30,6 +31,7 @@ public class Game {
 	private List<String> fightLog;
 
 	boolean handled = false;
+	private Vector2 oldHeroPosition;
 
 	public Game() {
 		this.map = new GameMap();
@@ -50,6 +52,17 @@ public class Game {
 
 			this.handleDroppedItemState();
 
+			if (map.hasFoundEnnemy(position)) {
+				currentFoe = Foe.generateFoe(this.hero.getLevel());
+			} else if (this.currentFoe == null) {
+				Random rnd = new Random();
+
+				if (rnd.nextFloat() >= 0.6) {
+					int healed = this.hero.healPercentage(10);
+					insertLog("You found an health potion ! You restored %d hit points.\n", healed);
+				}
+			}
+
 			MapView mapViewCli = new MapView(position, mapSize);
 			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
 
@@ -58,12 +71,9 @@ public class Game {
 				System.exit(0);
 			}
 
-			if (map.hasFoundEnnemy(position)) {
-				currentFoe = Foe.generateFoe(this.hero.getLevel());
-			}
-
-			hudViewCli.aled();
+			hudViewCli.displayStats();
 			hudViewCli.displayExperienceBar();
+			hudViewCli.displayItems();
 
 			for (String msg : this.fightLog) {
 				System.out.println(msg);
@@ -86,9 +96,9 @@ public class Game {
 					this.generateLoot();
 					int healed = this.hero.healPercentage(10);
 					insertLog("You've been healed for 10%% health point (%d)\n", healed);
-					hudViewCli.displayItemProperties(this.droppedItem);
 					handled = true;
 				}
+				hudViewCli.displayItemProperties(this.droppedItem);
 				System.out.println("[y] Equip new item | [n] Leave");
 			}
 
@@ -115,7 +125,16 @@ public class Game {
 	}
 
 	private void tryRun() {
+		Random rnd = new Random();
 
+		if (rnd.nextBoolean()) {
+			insertLog("Phew, you successfully ran away ! (coward.)");
+			this.currentFoe = null;
+			this.hero.getModel().setPosition(this.oldHeroPosition.clone());
+		} else {
+			insertLog("Railed to run away, sorry, now fight for your life !");
+			this.lastState = S_ATTACKING;
+		}
 	}
 
 	private boolean simulateFight() {
@@ -177,20 +196,20 @@ public class Game {
 	private void handleCliMove(String input) {
 		switch (input) {
 			case "w":
+				this.oldHeroPosition = this.hero.getPosition().clone();
 				this.hero.moveBy(0, 1);
-				System.out.println("Up");
 				break;
 			case "s":
+				this.oldHeroPosition = this.hero.getPosition().clone();
 				this.hero.moveBy(0, -1);
-				System.out.println("Down");
 				break;
 			case "a":
+				this.oldHeroPosition = this.hero.getPosition().clone();
 				this.hero.moveBy(-1, 0);
-				System.out.println("Left");
 				break;
 			case "d":
+				this.oldHeroPosition = this.hero.getPosition().clone();
 				this.hero.moveBy(1, 0);
-				System.out.println("Right");
 				break;
 		}
 	}
@@ -198,7 +217,7 @@ public class Game {
 	private void insertLog(String format, Object... args) {
 		LocalDateTime time = LocalDateTime.now();
 
-		String log = String.format("[%d:%d:%d] %s", time.getHour(), time.getMinute(), time.getSecond(),
+		String log = String.format("[%02d:%02d:%02d] %s", time.getHour(), time.getMinute(), time.getSecond(),
 				String.format(format, args));
 
 		this.fightLog.add(0, log);
@@ -224,9 +243,6 @@ public class Game {
 
 	private void generateLoot() {
 		this.hero.getLevel();
-
-		System.out.println(this.currentFoe.getLevel());
-		System.out.println(this.currentFoe.getPower());
 
 		Random rnd = new Random();
 
