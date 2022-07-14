@@ -9,6 +9,8 @@ import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.Model.Items.WeaponModel;
 
+import lombok.Getter;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -19,8 +21,11 @@ public class Hero {
 
 	private HeroModel hero;
 
+	@Getter
 	private HelmModel helm;
+	@Getter
 	private ArmorModel armor;
+	@Getter
 	private WeaponModel weapon;
 
 	public Hero() {
@@ -94,11 +99,17 @@ public class Hero {
 	public int receiveDamage(int foeLevel, int foeDamage) {
 		int damageIncrease = (int) (((foeLevel - this.getLevel()) / 13.37) * foeDamage);
 
-		int diff = Math.max((foeDamage + damageIncrease) - this.getDefense(), 1);
+		double armorReduction = (double) ((double) hero.getDefense()
+				/ (100.0 + (100.0 * ((double) hero.getLevel() * 0.12))));
 
-		this.hero.decreaseHitPoint(diff);
+		int damages = (int) ((double) (foeDamage + damageIncrease));
+		int reducedDamages = (int) Math.max(damages * 0.2, (damages - (damages * (armorReduction))));
 
-		return (diff);
+		this.hero.decreaseHitPoint(reducedDamages);
+
+		// System.out.printf("==> %f\n", Math.log(hero.getLevel()) * 0.80);
+
+		return (reducedDamages);
 	}
 
 	/**

@@ -10,6 +10,8 @@ import com.slopez.swingy.Model.Items.WeaponModel;
 public class HudView {
 	private Hero hero;
 
+	public static String SUPERIOR = "\033[38;2;50;255;155m";
+	public static String INFERIOR = "\033[38;2;255;50;155m";
 	public static String RED = "\033[48;2;155;50;155m";
 	public static String RESET = "\033[0;00m";
 
@@ -54,14 +56,30 @@ public class HudView {
 
 	public void displayItemProperties(ItemModel item) {
 		String itemType = "";
+		String modifierType = "";
+		ItemModel oldItem = null;
+
 		if (item instanceof ArmorModel) {
 			itemType = "Armor";
+			modifierType = "Defense";
+			oldItem = this.hero.getArmor();
 		} else if (item instanceof HelmModel) {
+			oldItem = this.hero.getHelm();
+			modifierType = "Health";
 			itemType = "Helm";
 		} else if (item instanceof WeaponModel) {
+			oldItem = this.hero.getWeapon();
+			modifierType = "Damages";
 			itemType = "Weapom";
 		}
-		p("You looted a new %s : %s (%d)\n", itemType, item.getName(), item.getModifier());
+
+		boolean isSuperior = item.getModifier() - oldItem.getModifier() > 0;
+
+		p("You looted a new %s\n", itemType);
+		p("%s\n", item.getName());
+		p("%16s : %+d (%s%+d%s)\n", modifierType, item.getModifier(), isSuperior ? SUPERIOR : INFERIOR,
+				item.getModifier() - oldItem.getModifier(), RESET);
+
 	}
 
 	private String hudDisplay(String title, int value) {
@@ -74,8 +92,10 @@ public class HudView {
 		String healthHud = String.format("[%-8s %12d]", "Health", current);
 		StringBuffer buffer = new StringBuffer(healthHud);
 
-		buffer.insert(1, RED);
-		buffer.insert(percentage + RED.length(), RESET);
+		if (percentage > 0) {
+			buffer.insert(1, RED);
+			buffer.insert(percentage + RED.length(), RESET);
+		}
 		// p("%s\n", buffer);
 		return (buffer.toString());
 	}

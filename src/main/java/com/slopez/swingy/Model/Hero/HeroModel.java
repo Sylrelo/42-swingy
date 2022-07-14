@@ -40,10 +40,10 @@ public class HeroModel {
 	private Vector2 position;
 
 	public HeroModel() {
-		this.hitpoint = 100;
-		this.maxHitPoint = 100;
-		this.attack = 10;
-		this.defense = 10;
+		this.hitpoint = 120;
+		this.maxHitPoint = 120;
+		this.attack = 20;
+		this.defense = 40;
 		this.level = 1;
 
 		double mapSize = GameMap.getMaxSize(1);

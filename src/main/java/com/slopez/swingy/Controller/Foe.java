@@ -68,8 +68,8 @@ public class Foe {
 		foe.setHitpoint(foeLevel * 64);
 		foe.setMaxHitPoint(foeLevel * 64);
 
-		foe.setAttack(foeLevel * 4);
-		foe.setDefense(foeLevel * 4);
+		foe.setAttack(foeLevel * 14);
+		foe.setDefense(foeLevel * 14);
 
 		return new Foe(foe);
 	}

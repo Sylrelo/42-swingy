@@ -126,10 +126,7 @@ public class Game {
 		}
 
 		int inflictedDamage = this.currentFoe.receiveDamage(this.hero.getLevel(), this.hero.getAttackDamage());
-		int receivedDamage = this.hero.receiveDamage(currentFoe.getLevel(), currentFoe.getAttack());
-
 		insertLog("Inflicted %d damages.", inflictedDamage);
-		insertLog("Received %d damages.", receivedDamage);
 
 		if (this.currentFoe.getHitpoint() <= 0) {
 			boolean hasLeveledUp = this.hero.addExperience(this.currentFoe.getGivenExperience());
@@ -139,14 +136,15 @@ public class Game {
 				insertLog("You leveled up ! Congratulation.");
 
 			this.lastState = S_FIGHT_WON;
+			return false;
 		}
+
+		int receivedDamage = this.hero.receiveDamage(currentFoe.getLevel(), currentFoe.getAttack());
+		insertLog("Received %d damages.", receivedDamage);
 
 		if (this.hero.getHitPoints() <= 0) {
 			this.lastState = S_FIGHT_LOST;
-		}
-
-		if (this.currentFoe.getHitpoint() <= 0 || this.hero.getHitPoints() <= 0) {
-			return false;
+			return true;
 		}
 
 		return true;
@@ -232,11 +230,11 @@ public class Game {
 
 		Random rnd = new Random();
 
-		int maxModifier = rnd.nextInt(12 * currentFoe.getLevel());
-		int modifier = (int) (5.0 + (10.0 * (double) hero.getLevel() * 0.2));
+		int maxModifier = rnd.nextInt((int) (21 * ((double) currentFoe.getLevel() * 0.85)));
+		int minModifier = rnd.nextInt((int) (10 * ((double) currentFoe.getLevel() * 0.70)));
 
-		System.out.printf("%d %d\n", modifier, maxModifier);
+		int modifier = (int) (minModifier + (10.0 * (double) currentFoe.getLevel() * 0.2));
 
-		this.droppedItem = Item.Create(Item.type[rnd.nextInt(3)], modifier);
+		this.droppedItem = Item.Create(Item.type[rnd.nextInt(3)], modifier + maxModifier);
 	}
 }
