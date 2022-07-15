@@ -10,11 +10,12 @@ import javax.swing.JFrame;
 
 import com.slopez.swingy.Main;
 import com.slopez.swingy.Vector2;
-import com.slopez.swingy.Model.Items.HelmModel;
 import com.slopez.swingy.Model.Items.ItemModel;
 import com.slopez.swingy.View.HudView;
 import com.slopez.swingy.View.MapView;
-import com.slopez.swingy.View.Swing.HudGUI;
+import com.slopez.swingy.View.Swing.HeroGUI;
+import com.slopez.swingy.View.Swing.LogGUI;
+import com.slopez.swingy.View.Swing.MapGUI;
 
 public class Game {
 
@@ -47,9 +48,14 @@ public class Game {
 		Scanner scanner = new Scanner(System.in);
 
 		JFrame jframe = Main.createWindow();
-		HudGUI swingGui = new HudGUI(jframe);
+		HeroGUI heroGUI = new HeroGUI();
+		LogGUI logGUI = new LogGUI();
+		MapGUI mapGUI = new MapGUI();
 
-		swingGui.displayHero();
+		jframe.setLayout(null);
+		jframe.getContentPane().add(logGUI);
+		jframe.getContentPane().add(heroGUI);
+		jframe.getContentPane().add(mapGUI);
 		jframe.dispose();
 		jframe.pack();
 		jframe.setSize(1280, 720);
@@ -79,9 +85,8 @@ public class Game {
 			MapView mapViewCli = new MapView(position, mapSize);
 			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
 
-			swingGui.setFoe(this.currentFoe);
-			swingGui.setHero(this.hero);
-			swingGui.update();
+			heroGUI.update(this.hero);
+			logGUI.update(this.fightLog);
 
 			if (position.x <= 0 || position.x > mapSize || position.y <= 0 || position.y > mapSize) {
 				System.out.println("Game finished ! Congrats.");
