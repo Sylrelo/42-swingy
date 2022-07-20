@@ -48,6 +48,7 @@ public class MapGUI extends JPanel {
 			for (int x = 0; x < SIZE; x++) {
 				map[y][x].setBackground(new Color(255, 255, 255, 255));
 				map[y][x].setText("");
+				map[y][x].setOpaque(true);
 
 				int dx = x + (int) (heroPosition.x - 5);
 				int dy = (int) (heroPosition.y + 5) - y;
@@ -67,6 +68,7 @@ public class MapGUI extends JPanel {
 
 				if (dx < -1 || dy < -1 || dx > mapSize || dy > mapSize) {
 					map[y][x].setBackground(new Color(255, 255, 255, 255));
+					map[y][x].setOpaque(false);
 				}
 
 				if (dx == (int) heroPosition.x && dy == (int) heroPosition.y) {
