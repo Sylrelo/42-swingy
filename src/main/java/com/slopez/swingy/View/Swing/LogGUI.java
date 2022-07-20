@@ -21,7 +21,7 @@ public class LogGUI extends JPanel {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         add(scroll);
-        setBounds(20, 140, 460, 100);
+        setBounds(20, 340, 460, 100);
     }
 
     public void update(List<String> logs) {

@@ -71,22 +71,24 @@ public class Game {
 
 			this.handleDroppedItemState();
 
-			if (map.hasFoundEnnemy(position)) {
-				currentFoe = Foe.generateFoe(this.hero.getLevel());
-			} else if (this.currentFoe == null) {
-				Random rnd = new Random();
+			// if (map.hasFoundEnnemy(position)) {
+			// currentFoe = Foe.generateFoe(this.hero.getLevel());
+			// } else if (this.currentFoe == null) {
+			// Random rnd = new Random();
 
-				if (rnd.nextFloat() >= 0.6) {
-					int healed = this.hero.healPercentage(10);
-					insertLog("You found an health potion ! You restored %d hit points.", healed);
-				}
-			}
+			// if (rnd.nextFloat() >= 0.6) {
+			// int healed = this.hero.healPercentage(10);
+			// insertLog("You found an health potion ! You restored %d hit points.",
+			// healed);
+			// }
+			// }
 
 			MapView mapViewCli = new MapView(position, mapSize);
 			HudView hudViewCli = new HudView(this.hero, this.currentFoe);
 
 			heroGUI.update(this.hero);
 			logGUI.update(this.fightLog);
+			mapGUI.update(this.hero.getPosition(), mapSize);
 
 			if (position.x <= 0 || position.x > mapSize || position.y <= 0 || position.y > mapSize) {
 				System.out.println("Game finished ! Congrats.");

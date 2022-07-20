@@ -2,6 +2,7 @@ package com.slopez.swingy.View;
 
 import java.util.Map;
 
+import com.slopez.swingy.Utils;
 import com.slopez.swingy.Vector2;
 import com.slopez.swingy.Controller.GameMap;
 
@@ -22,7 +23,7 @@ public class MapView {
 		for (int y = (int) heroPosition.y + MAX_VIEW_Y; y >= (int) heroPosition.y - MAX_VIEW_Y; y--) {
 			for (int x = (int) heroPosition.x - MAX_VIEW_X; x < (int) heroPosition.x + MAX_VIEW_X; x++) {
 				double schneider = GameMap.schneiderRandom(new Vector2(x, y));
-				int color = range((int) (schneider * 255.0), 0, 255, 100, 255);
+				int color = Utils.range((int) (schneider * 255.0), 0, 255, 100, 255);
 
 				String str = String.format("\033[48;2;%d;%d;%dm \033[0;00m", color, color, color);
 
@@ -42,11 +43,4 @@ public class MapView {
 		System.out.printf("\n");
 	}
 
-	private int range(int oldValue, int oldMax, int oldMin, int newMax, int newMin) {
-		int oldRange = (oldMax - oldMin);
-		int newRange = (newMax - newMin);
-		int newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
-
-		return newValue;
-	}
 }

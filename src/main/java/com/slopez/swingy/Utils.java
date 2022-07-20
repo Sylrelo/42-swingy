@@ -33,4 +33,12 @@ public class Utils {
 
         return percentage;
     }
+
+    public static int range(int oldValue, int oldMax, int oldMin, int newMax, int newMin) {
+        int oldRange = (oldMax - oldMin);
+        int newRange = (newMax - newMin);
+        int newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+
+        return newValue;
+    }
 }
